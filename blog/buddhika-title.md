@@ -1,6 +1,6 @@
 ---
-path: buddhika path
+path: snowy
 date: 2021-09-21T14:56:11.860Z
-title: buddhika title
+title: tin tin is a hero
 ---
-buddhika body
+HI there tin tin
