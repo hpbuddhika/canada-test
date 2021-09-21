@@ -1,5 +1,7 @@
 backend:
-  name: test-repo
+  name: github
+  repo: hpbuddhika/canada-test
+  branch: your-main-branch
 media_folder: static/assets
 public_folder: /assets
 collections:
