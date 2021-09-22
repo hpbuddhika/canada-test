@@ -4,13 +4,44 @@ backend:
   branch: main
 media_folder: static/assets
 public_folder: /assets
-collections:
-  - name: blog
-    label: Blog
-    folder: blog
-    create: true
-    fields:
-      - { name: path, label: Path }
-      - { name: date, label: Date, widget: datetime }
-      - { name: title, label: Title }
-      - { name: body, label: Body, widget: markdown }
+collections: # A list of collections the CMS should be able to edit
+  - name: 'questions' # Used in routes, ie.: /admin/collections/:slug/edit
+    label: 'Question' # Used in the UI
+    label_singular: 'Question' # Used in the UI, ie: "New Post"
+    description: >
+      Add questions from here :)
+    folder: '_questions'
+    slug: '{{year}}-{{month}}-{{day}}-{{slug}}'
+    summary: '{{title}} -- {{year}}/{{month}}/{{day}}'
+    create: true # Allow users to create new documents in this collection
+    view_filters:
+      - label: Posts With Index
+        field: title
+        pattern: 'This is post #'
+      - label: Posts Without Index
+        field: title
+        pattern: front matter post
+      - label: Drafts
+        field: draft
+        pattern: true
+    view_groups:
+      - label: Year
+        field: date
+        pattern: \d{4}
+      - label: Drafts
+        field: draft
+    fields: # The fields each document in this collection have
+      - { label: 'Title', name: 'title', widget: 'select', options: ['a', 'b', 'c'] }
+      - { label: 'Question-1', name: 'q1', widget: 'string'}
+      - { label: 'Question-2', name: 'q2', widget: 'string'}
+      - { label: 'Question-3', name: 'q3', widget: 'string'}
+      - { label: 'Question-4', name: 'q4', widget: 'string'}
+      - {
+          label: 'Publish Date',
+          name: 'date',
+          widget: 'datetime',
+          date_format: 'YYYY-MM-DD',
+          time_format: 'HH:mm',
+          format: 'YYYY-MM-DD HH:mm',
+        }
+      - { label: 'Body', name: 'body', widget: 'markdown', hint: 'Main content goes here.', required: false }
