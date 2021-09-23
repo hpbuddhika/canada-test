@@ -3,6 +3,8 @@ import { graphql } from 'gatsby'
 
 import Layout from "../components/layout"
 import Seo from "../components/seo"
+import Header from "../components/header"
+import Hero from "../components/hero"
 
 
 const Home = ({ data, location }) => {
@@ -13,7 +15,8 @@ const Home = ({ data, location }) => {
   return (
     <Layout location={location} title={siteTitle}>
       <Seo title="All posts" />
-      <h1>hi</h1>
+      <Header></Header>
+      <Hero></Hero>
     </Layout>
   )
 }
