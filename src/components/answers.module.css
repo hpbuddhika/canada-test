@@ -1,0 +1,78 @@
+:root{
+    --default_bg : white;
+    --hover_bg : rgb(240, 238, 238);
+}
+
+.correct_answer {
+  cursor: pointer;
+  background-color: var(--default_bg);
+ 
+}
+
+.correct_answer > div {
+    /* pointer-events: none; */
+ 
+}
+
+.correct_answer :hover {
+    background-color: var(--hover_bg);
+    cursor:grab
+}
+
+
+.incorrect_answer{
+  pointer-events:none;
+  text-decoration: line-through;
+  background-color: var(--default_bg);
+
+
+}
+
+.noncorrect_answer{
+  opacity: 0.7;
+  background-color: var(--default_bg);
+  pointer-events:none;
+
+}
+
+/* .incorrect_answer:hover #svg_id {
+  stroke-width: 10%;
+  stroke: rgb(129, 128, 128);
+} */
+
+.default_answer{
+    cursor: pointer;
+    background-color: var(--default_bg);
+    transition: all 0.2s ease;
+}
+
+.default_answer :hover {
+    background-color: var(--hover_bg);
+  
+}
+
+.default_answer :hover #default_icon {
+    stroke-width: 10%;
+    stroke: rgb(129, 128, 128);
+  
+}
+
+#default_icon {
+  width: 30px;
+  height: 30px;
+  margin-top: 5px;
+  margin-left: 10px;
+  fill: rgb(153, 152, 152);
+  stroke: rgb(153, 152, 152);
+  stroke-width: 5%;
+  overflow: visible;
+  transition: all 0.2s ease;
+}
+
+#correct_icon{
+    width: 30px;
+    height: 30px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+

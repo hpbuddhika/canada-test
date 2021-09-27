@@ -2,10 +2,18 @@ module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}'],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'sans': ['Montserrat']
+      }
+    },
   },
   variants: {
-    extend: {},
+    extend: {
+      strokeWidth: ['hover', 'focus'],
+      borderRadius : ['hover']
+
+    },
   },
-  plugins: [],
+  plugins: [require('daisyui')],
 }

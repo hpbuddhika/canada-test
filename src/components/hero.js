@@ -1,6 +1,13 @@
 import React from "react"
+import { navigate } from "gatsby"
+
 
 const Hero = () => {
+  const toQuiz = e => {
+    e.preventDefault()
+    navigate("/quizCat")
+  }
+
   return (
     <section class="text-gray-600 body-font">
       <div class="container mx-auto flex px-5 py-24 items-center justify-center flex-col">
@@ -21,8 +28,11 @@ const Hero = () => {
             photo booth af fingerstache pitchfork.
           </p>
           <div class="flex justify-center">
-            <button class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg">
-              Button
+            <button
+              onClick={toQuiz}
+              class="inline-flex text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded text-lg"
+            >
+              Quiz
             </button>
             <button class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">
               Button
