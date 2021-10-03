@@ -1,87 +1,158 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState,forwardRef,useImperativeHandle } from "react"
 import Answers from "./answers"
 
-const Question = props => {
+const Question = React.forwardRef((props,ref) => {
   const questionsWithAnswersList = []
-  const answeredQuestionList = []
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [data, setData] = useState("")
+  const [answeredQuestionList, setaAnsweredQuestionList] = useState([])
 
+  React.useImperativeHandle(ref, () => ({
+    foo(e) {
+      console.log('fooo=========> ', e)
+      setCurrentQuestion(
+        <div>
+         ola
+        </div>
+      )
+    }
+  }))
 
-//   {id: '2bba36c5-31f5-5be1-bc52-f7c19231d791', frontmatter: {…}}
-// frontmatter:
-// a1: "a1"
-// a2: "a2"
-// a3: "a3"
-// a4: "a4"
-// hint
-// correctAnswer: "a1"
-
+  const onUserAnswer = (userAnswer, question) => {
+   
+    const editedQuestion = { ...question, userAnswer }
+    console.log("edited question==========> ", editedQuestion)
+    setaAnsweredQuestionList([...answeredQuestionList, editedQuestion])
+    console.log("answered arry  ****===> ", answeredQuestionList)
+  }
 
   props.questions.forEach(element => {
     questionsWithAnswersList.push(element.node)
   })
 
   const questionData = questionsWithAnswersList[0]
-  console.log("question data ==> ", questionData)
 
   const [currentQuestion, setCurrentQuestion] = useState(
-    <div id = {questionData.id}>
+    <div id={questionData.id}>
       <h1 className="h-1/3 text-2xl font-medium text-gray-900">
         {questionData.frontmatter.question}
       </h1>
-      <Answers answers = {questionData.frontmatter}></Answers>
+      <Answers
+        id={questionData.id}
+        answers={questionData.frontmatter}
+        userAnswer={onUserAnswer}
+      ></Answers>
       <div className="h-1/3">{questionData.frontmatter.hint}</div>
     </div>
   )
 
-  // useEffect(() => {
-  //   setCurrentQuestion( <>
-  //     <h1 className="h-1/3 text-2xl font-medium text-gray-900">
-  //       Et nulla in voluptate dolor exercitation aliquip commodo et ut
-  //       consectetur ipsum non. Enim eiusmod dolor aliquip ea reprehenderit
-  //       deserunt in non amet eu non do incididunt. Quis qui duis exercitation
-  //       ad ullamco anim enim laboris ut sunt velit.
-  //     </h1>
-  //     <Answers></Answers>
+  useEffect(() => {
+    props.onAnsweredQuestionList(answeredQuestionList)
+  }, [currentQuestionIndex, answeredQuestionList])
 
-  //     <div className="h-1/3">
-  //       Et nulla in voluptate dolor exercitation aliquip commodo et ut
-  //       consectetur ipsum non. Enim eiusmod dolor aliquip ea reprehenderit
-  //       deserunt in non amet eu non do incididunt. Quis qui duis exercitation
-  //       ad ullamco anim enim laboris ut sunt velit. Qui nostrud dolor eu sunt.
-  //       Laborum laboris mollit et ut esse proident ex commodo sit ullamco
-  //       cupidatat.
-  //     </div>
-  //   </>)
-  // }, [])
 
-  const onNextQuestion = (questionsWithAnswersList) => {
-    console.log("question with answers list ======> ", questionsWithAnswersList)
-    const questionData = questionsWithAnswersList[1]
+
+  const onNextQuestion = questionsWithAnswersList => {
+    if (questionsWithAnswersList.length - 1 == currentQuestionIndex) {
+      alert("no more questions")
+      return
+    }
+    // useState issue.needs to be fixed
+    const questionData = questionsWithAnswersList[currentQuestionIndex + 1]
+    setCurrentQuestionIndex(currentQuestionIndex + 1)
+  
+    for (let answeredQuestion of answeredQuestionList) {
+      if (answeredQuestion.id === questionData.id) {
+        const questionData = answeredQuestionList.filter(obj => {
+          return obj.id === answeredQuestion.id
+        })
+        setCurrentQuestion(
+          <div id={questionData[0].id}>
+            <h1 className="h-1/3 text-2xl font-medium text-gray-900">
+              {questionData[0].answers.question}
+            </h1>
+            <Answers
+              previousQuestionUserAnswer={questionData[0].userAnswer}
+              answers={questionData[0].answers}
+            ></Answers>
+            <div className="h-1/3">{questionData[0].answers.hint}</div>
+          </div>
+        )
+        return
+      }
+    }
+    // const questionData = answeredQuestionList[currentQuestionIndex + 1]
+
+    // setCurrentQuestionIndex(currentQuestionIndex + 1)
     setCurrentQuestion(
-      <div id = {questionData.id}>
-      <h1 className="h-1/3 text-2xl font-medium text-gray-900">
-        {questionData.frontmatter.question}
-      </h1>
-      <Answers answers = {questionData.frontmatter}></Answers>
-      <div className="h-1/3">{questionData.frontmatter.hint}</div>
-    </div>
+      <div id={questionData.id}>
+        <h1 className="h-1/3 text-2xl font-medium text-gray-900">
+          {questionData.frontmatter.question}
+        </h1>
+        <Answers
+          previousQuestionUserAnswer={questionData.userAnswer}
+          id={questionData.id}
+          answers={questionData.frontmatter}
+          userAnswer={onUserAnswer}
+        ></Answers>
+        <div className="h-1/3">{questionData.frontmatter.hint}</div>
+      </div>
     )
   }
 
-  console.log(questionsWithAnswersList)
+  const onPreviousQuestion = answeredQuestionList => {
+    if (currentQuestionIndex <= 0) {
+      return
+    }
+    setCurrentQuestionIndex(currentQuestionIndex - 1)
+
+    const questionData = answeredQuestionList[currentQuestionIndex - 1]
+    console.log("previous question data=-------- ", answeredQuestionList)
+
+    setCurrentQuestion(
+      <div id={questionData.id}>
+        <h1 className="h-1/3 text-2xl font-medium text-gray-900">
+          {questionData.answers.question}
+        </h1>
+        <Answers
+          previousQuestionUserAnswer={questionData.userAnswer}
+          answers={questionData.answers}
+        ></Answers>
+        <div className="h-1/3">{questionData.answers.hint}</div>
+      </div>
+    )
+  }
 
   return (
     <>
       <div className="w-full h-full text-left flex flex-col">
         {currentQuestion}
-        <div className="mt-10 text-right">
-          <button onClick={()=>onNextQuestion(questionsWithAnswersList)} class="btn btn-accent">
-            Next Question
+        <div className="flex justify-between mt-10">
+          <button
+            onClick={() => onPreviousQuestion(answeredQuestionList)}
+            class="btn btn-accent"
+            style={currentQuestionIndex == 0 ? style.previousBtn : null}
+          >
+            Previous Question
+          </button>
+          <button
+            onClick={() => onNextQuestion(questionsWithAnswersList)}
+            class="btn btn-accent"
+          >
+            {questionsWithAnswersList.length - 1 == currentQuestionIndex
+              ? "Finish"
+              : "Next Question"}
           </button>
         </div>
       </div>
     </>
   )
+})
+
+const style = {
+  previousBtn: {
+    visibility: "hidden",
+  },
 }
 
 export default Question

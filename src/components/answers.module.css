@@ -1,11 +1,14 @@
 :root{
     --default_bg : white;
+    --correct_bg : lightgreen;
+    --incorrect_bg: #FFA8B5;
     --hover_bg : rgb(240, 238, 238);
 }
 
 .correct_answer {
+  pointer-events:none;
   cursor: pointer;
-  background-color: var(--default_bg);
+  background-color: var(--correct_bg);
  
 }
 
@@ -23,10 +26,16 @@
 .incorrect_answer{
   pointer-events:none;
   text-decoration: line-through;
-  background-color: var(--default_bg);
+  background-color: var(--incorrect_bg);
 
 
 }
+
+.incorrect_answer:hover {
+  background-color: var(--hover_bg);
+  cursor:grab
+}
+
 
 .noncorrect_answer{
   opacity: 0.7;

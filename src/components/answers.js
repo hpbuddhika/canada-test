@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import svg from "../images/radio-btn.svg"
 import * as style from "./answers.module.css"
 
@@ -22,25 +22,99 @@ const Answers = props => {
   const [answerStyle3, setAnswerStyle3] = useState(style.default_answer)
 
   useEffect(() => {
-  console.log("inside useeffect=============================",props)
-  setCorrectAnswer(null)
-  setAnswerState("default")
-  setAnswerStyle0(style.default_answer)
-  setAnswerStyle1(style.default_answer)
-  setAnswerStyle2(style.default_answer)
-  setAnswerStyle3(style.default_answer)
+    if (props.previousQuestionUserAnswer != undefined) {
+      setAnswerStyle0(style.noncorrect_answer)
+      setAnswerStyle1(style.noncorrect_answer)
+      setAnswerStyle2(style.noncorrect_answer)
+      setAnswerStyle3(style.noncorrect_answer)
 
+      styleAnsweredQuestion(props)
+      return
+    } else {
+      setCorrectAnswer(null)
+      setAnswerState("default")
+      setAnswerStyle0(style.default_answer)
+      setAnswerStyle1(style.default_answer)
+      setAnswerStyle2(style.default_answer)
+      setAnswerStyle3(style.default_answer)
+    }
+  }, [props])
 
-  }, [props]);
+  const styleAnsweredQuestion = props => {
+    setCorrectAnswer(defaultCorrectAnswer)
+    const correctAnswerIndex = props.answers.correctAnswer - 1
+    const userAnswer = props.previousQuestionUserAnswer
+    const userAnswerIndex = answers.indexOf(userAnswer)
+    console.log(
+      "userAnswerINdex ====> ",
+      userAnswerIndex,
+      "corret index ======> ",
+      correctAnswerIndex
+    )
 
-  console.log("answer Style0 == > ", answerStyle0)
+    switch (correctAnswerIndex) {
+      case 0:
+        setAnswerStyle0(style.correct_answer)
+        break
+      case 1:
+        setAnswerStyle1(style.correct_answer)
+        break
+      case 2:
+        setAnswerStyle2(style.correct_answer)
+        break
+      case 3:
+        setAnswerStyle3(style.correct_answer)
+        break
+    }
+
+    if (userAnswerIndex != correctAnswerIndex) {
+      switch (userAnswerIndex) {
+        case 0:
+          setAnswerStyle0(style.incorrect_answer)
+          break
+        case 1:
+          setAnswerStyle1(style.incorrect_answer)
+          break
+        case 2:
+          setAnswerStyle2(style.incorrect_answer)
+          break
+        case 3:
+          setAnswerStyle3(style.incorrect_answer)
+          break
+      }
+    }
+
+    // switch (userAnswerIndex == correctAnswerIndex) {
+    //   case 0:
+    //     setAnswerStyle0(style.correct_answer)
+    //     break
+    //   case 1:
+    //     setAnswerStyle1(style.correct_answer)
+    //     break
+    //   case 2:
+    //     setAnswerStyle2(style.correct_answer)
+    //     break
+    //   case 3:
+    //     setAnswerStyle3(style.correct_answer)
+    //     break
+    // }
+
+    // setAnswerStyle0(style.default_answer)
+    // setAnswerStyle1(style.incorrect_answer)
+    // setAnswerStyle2(style.default_answer)
+    // setAnswerStyle3(style.default_answer)
+  }
 
   const generateKey = pre => {
     return `${pre}_${new Date().getTime()}`
   }
 
   const onAnswer = (e, index) => {
-
+    if (props.previousQuestionUserAnswer) {
+      console.log("previous question answered--------------------")
+      return
+    }
+    props.userAnswer(e, props)
     setCorrectAnswer(props.answers.correctAnswer)
 
     if (
@@ -49,56 +123,86 @@ const Answers = props => {
     ) {
       return
     }
-   
+
     if (e === answers[props.answers.correctAnswer - 1]) {
-      console.log("correct answer=========")
       switch (index) {
         case 0:
           setAnswerStyle0(style.correct_answer)
+          setAnswerStyle1(style.noncorrect_answer)
+          setAnswerStyle2(style.noncorrect_answer)
+          setAnswerStyle3(style.noncorrect_answer)
+          break
         case 1:
           setAnswerStyle1(style.correct_answer)
+          setAnswerStyle0(style.noncorrect_answer)
+          setAnswerStyle2(style.noncorrect_answer)
+          setAnswerStyle3(style.noncorrect_answer)
+          break
         case 2:
           setAnswerStyle2(style.correct_answer)
+          setAnswerStyle0(style.noncorrect_answer)
+          setAnswerStyle1(style.noncorrect_answer)
+          setAnswerStyle3(style.noncorrect_answer)
+          break
         case 3:
           setAnswerStyle3(style.correct_answer)
+          setAnswerStyle0(style.noncorrect_answer)
+          setAnswerStyle1(style.noncorrect_answer)
+          setAnswerStyle2(style.noncorrect_answer)
+          break
       }
 
       setAnswerState(answerStates.CORRECT)
     } else {
-      console.log("in correct answer=========",correctAnswer)
-  
       switch (index) {
         case 0:
           setAnswerStyle0(style.incorrect_answer)
-          
-       
 
-          // setAnswerStyle1(style.noncorrect_answer)
-          // setAnswerStyle2(style.noncorrect_answer)
-          // setAnswerStyle3(style.noncorrect_answer)
+          setAnswerStyle1(style.noncorrect_answer)
+          setAnswerStyle2(style.noncorrect_answer)
+          setAnswerStyle3(style.noncorrect_answer)
           break
         case 1:
           setAnswerStyle1(style.incorrect_answer)
+          console.log("incoreect------------------------")
 
-          // setAnswerStyle0(style.noncorrect_answer)
-          // setAnswerStyle2(style.noncorrect_answer)
-          // setAnswerStyle3(style.noncorrect_answer)
+          setAnswerStyle0(style.noncorrect_answer)
+          setAnswerStyle2(style.noncorrect_answer)
+          setAnswerStyle3(style.noncorrect_answer)
           break
         case 2:
           setAnswerStyle2(style.incorrect_answer)
+          console.log("incoreect------------------------")
 
-          // setAnswerStyle0(style.noncorrect_answer)
-          // setAnswerStyle1(style.noncorrect_answer)
-          // setAnswerStyle3(style.noncorrect_answer)
+          setAnswerStyle0(style.noncorrect_answer)
+          setAnswerStyle1(style.noncorrect_answer)
+          setAnswerStyle3(style.noncorrect_answer)
           break
         case 3:
-          setAnswerStyle3(style.incorrect_answer) 
-      
-          // setAnswerStyle0(style.correct_answer)
-          // setAnswerStyle1(style.noncorrect_answer)
-          // setAnswerStyle2(style.noncorrect_answer)
+          setAnswerStyle3(style.incorrect_answer)
+          console.log("incoreect------------------------")
+
+          setAnswerStyle0(style.noncorrect_answer)
+          setAnswerStyle1(style.noncorrect_answer)
+          setAnswerStyle2(style.noncorrect_answer)
           break
       }
+
+      switch (props.answers.correctAnswer - 1) {
+        case 0:
+          setAnswerStyle0(style.correct_answer)
+          break
+        case 1:
+          setAnswerStyle1(style.correct_answer)
+          break
+        case 2:
+          setAnswerStyle2(style.correct_answer)
+          break
+        case 3:
+          setAnswerStyle3(style.correct_answer)
+          break
+      }
+
       setAnswerState(answerStates.INCORRECT)
     }
   }
@@ -115,8 +219,7 @@ const Answers = props => {
           ? answerStyle2
           : index == 3
           ? answerStyle3
-          :null
-
+          : null
       }
       onClick={() => onAnswer(answer, index)}
     >
